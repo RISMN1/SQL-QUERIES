@@ -1,0 +1,11 @@
+SELECT 
+    b.name, COUNT(b.name) as count, C.sortname
+FROM
+    leads AS a
+        LEFT JOIN 
+    lead_source AS b ON b.id = a.lead_source_id
+    LEFT JOIN 
+    countries AS C ON C.phonecode=a.country_code
+WHERE
+   date(a.created_date)=date(now())-1
+GROUP BY b.name, C.sortname
