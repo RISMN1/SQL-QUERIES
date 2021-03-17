@@ -1,0 +1,38 @@
+use muzigal_prod;
+SELECT
+    b.name,
+    COUNT(d.student_id) AS total_trials,
+    SUM(IF(d.is_confirmed = 1, 1, 0)) AS confirmed,
+    SUM(IF(d.is_confirmed = 0, 1, 0)) AS unconfirmed,
+    SUM(IF(d.is_rejected = 1, 1, 0)) AS rejected,
+    SUM(IF(d.is_complete = 1, 1, 0)) AS complete,
+    SUM(IF(d.is_complete = 0, 1, 0)) AS incomplete,
+    SUM(IF(e.start_time BETWEEN CONCAT(DATE(NOW()), ' 09:00:00') AND CONCAT(DATE(NOW()), ' 11:59:59'),
+        1,
+        0)) AS '9-12',
+    SUM(IF(e.start_time BETWEEN CONCAT(DATE(NOW()), ' 12:00:00') AND CONCAT(DATE(NOW()), ' 14:59:59'),
+        1,
+        0)) AS '12-15',
+    SUM(IF(e.start_time BETWEEN CONCAT(DATE(NOW()), ' 15:00:00') AND CONCAT(DATE(NOW()), ' 17:59:59'),
+        1,
+        0)) AS '15-18',
+    SUM(IF(e.start_time BETWEEN CONCAT(DATE(NOW()), ' 18:00:00') AND CONCAT(DATE(NOW()), ' 20:59:59'),
+        1,
+        0)) AS '18-21',
+    SUM(IF(e.start_time BETWEEN CONCAT(DATE(NOW()), ' 21:00:00') AND CONCAT(DATE(NOW()), ' 23:59:59'),
+        1,
+        0)) AS '21-00'
+FROM
+    admin_users AS a
+        INNER JOIN
+    admin_users_cohorts AS b ON b.id = a.cohort_id
+        INNER JOIN
+    users AS c ON c.corporate_user_assigned = a.id
+        INNER JOIN
+    trial_lessons AS d ON d.student_id = c.id
+        INNER JOIN
+    teacher_schedule AS e ON e.id = d.slot_id
+WHERE
+    a.is_deleted = 0
+        AND DATE(e.start_time) = DATE(NOW())
+GROUP BY b.name
