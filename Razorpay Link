@@ -1,0 +1,28 @@
+SELECT
+a.created_date,
+    CONCAT(c.fname, ' ',c.lname) AS student_name,
+    c.phone,
+    a.payment_url,
+    b.amount,
+    CONCAT(e.fname, ' ',e.lname) AS teacher_name,
+    f.name AS subject,
+    g.name AS skill_level,
+    CONCAT(h.fname, ' ',h.lname) AS agent_name,
+    (SELECT COUNT(*) FROM orders WHERE student_id = c.id AND payment_complete = 1) AS paid_order_count
+FROM
+    rzp_payment_links AS a
+        INNER JOIN
+    orders AS b ON b.id = a.order_id
+        INNER JOIN
+    users AS c ON c.id = b.student_id
+        INNER JOIN
+    teacher_classes AS d ON d.id = b.class_id
+        INNER JOIN
+    users AS e ON e.id = d.users_id
+        INNER JOIN
+    subjects AS f ON f.id = d.subjects_id
+        INNER JOIN
+    skill_levels AS g ON g.id = d.skill_levels_id
+LEFT JOIN admin_users AS h ON h.id = c.corporate_user_assigned
+WHERE
+    b.payment_complete = 0
