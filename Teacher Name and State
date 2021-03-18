@@ -1,0 +1,4 @@
+select concat(a.fname,' ',a.lname) as name,a.phone,c.name from users as a 
+left join teacher_profile as b on b.users_id=a.id
+left join states as c on c.id=b.state_id 
+where a.role_id=2 and b.verified=1 
