@@ -1,0 +1,13 @@
+SELECT 
+    d.name, round(avg(a.amount)) as average,count(a.id) as cont
+FROM
+    muzigal_prod.orders AS a
+        INNER JOIN
+    users AS b ON b.id = a.student_id
+        left JOIN
+        admin_users as e on e.id=b.corporate_user_assigned
+ left join   admin_users_cohorts AS d ON d.id = e.cohort_id
+WHERE
+    a.payment_complete = 1
+        AND a.session_qty > 1
+group BY d.name ;
