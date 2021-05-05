@@ -1,0 +1,6 @@
+SELECT Sum(IF(phone is Null ,1,0)) AS Unq
+ FROM users WHERE self_signup = 1 AND  DATE(created_date) = date(now()) and country_iso='US' 
+
+UNION 
+ SELECT Sum(IF(phone is Null ,0,1)) AS QUALIFIED 
+ FROM users WHERE self_signup = 1 AND DATE(created_date) = date(now()) and country_iso='US' 
