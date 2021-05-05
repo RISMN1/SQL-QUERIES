@@ -1,0 +1,19 @@
+
+
+SELECT 
+    c.name,
+    CONCAT(b.fname, ' ', b.lname) AS namess,
+    COUNT(a.id) AS atl,
+    sum(IF(a.lead_status_id = 1, 1, 0)) AS dfv,
+    sum(IF(a.lead_status_id = 2, 1, 0)) AS warm,
+    sum(IF(a.lead_status_id = 3, 1, 0)) AS hot,
+    sum(IF(a.lead_status_id = 5, 1, 0)) AS cold,
+    COUNT((SELECT DISTINCT orders.student_id FROM orders WHERE orders.student_id = a.id AND orders.payment_complete = 1)) AS converted
+FROM
+    users AS a
+        INNER JOIN
+    admin_users AS b ON b.id = a.corporate_user_assigned
+        INNER JOIN
+    admin_users_cohorts AS c ON c.id = b.cohort_id
+     where a.converted_lead_id is null and b.is_deleted=0
+    GROUP BY c.name, namess
