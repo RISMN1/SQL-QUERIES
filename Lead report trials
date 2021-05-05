@@ -1,0 +1,3 @@
+SELECT  count(distinct student_id),date(date(now())) FROM orders 
+inner join users as b  on b.id=student_id
+where orders.payment_type=1 and date(b.created_date)=date(date(now())) and b.self_signup=1 and b.country_iso='us' 
