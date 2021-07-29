@@ -1,0 +1,12 @@
+SELECT 
+    distinct a.id 
+    
+FROM
+    users AS a inner join orders as b on b.student_id=a.id
+
+       
+WHERE 
+     a.self_signup = 1
+        AND DATE(a.created_date) = '2021-07-26'
+        AND country_code  in (91)
+        and a.lead_source_id is null and a.role_id=3
