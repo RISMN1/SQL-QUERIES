@@ -1,0 +1,13 @@
+SELECT DISTINCT
+            a.id
+        FROM
+            users AS a
+                INNER JOIN
+            orders AS b ON b.student_id = a.id
+        WHERE
+            a.self_signup = 1
+                AND DATE(a.created_date) = '2021-07-26'
+                AND country_code = 91
+                AND a.lead_source_id = 8
+                AND a.role_id = 3
+                AND a.id
